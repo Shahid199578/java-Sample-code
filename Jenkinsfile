@@ -6,7 +6,7 @@ pipeline {
     environment {
         
         your_tomcat_ip = '18.204.9.68'
-        WAR_FILE = 'Shahidty-app'
+        WAR_FILE = 'Shahidt-app'
         
     }
     stages {

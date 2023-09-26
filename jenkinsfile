@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+    tools {
+        maven 'Maven-Tool'
+    }
+    stages {
+        stage("Git Checkout") {
+            steps {
+                git branch: 'master', url: 'https://github.com/Shahid199578/java-Sample-code.git'
+            }
+        }
+        stage("Maven Build") {
+            steps {
+                sh "mvn clean package"
+            }
+        }
+        stage("Archive Artifact") {
+            steps {
+                archiveArtifacts 'target/*.war'
+            }
+        }
+        
+        stage ('Deploying Artifact') {
+            steps {
+                script {
+                    sshagent(credentials: ['tomcat-server']) {
+                        sh "scp -o StrictHostKeyChecking=no $WORKSPACE/*/*.war ubuntu@your-tomcat-ip:/home/ubuntu"
+                    }
+                }
+            }
+        }
+    }
+}
